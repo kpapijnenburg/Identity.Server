@@ -1,4 +1,5 @@
 using Identity.DAL;
+using Identity.Server.Builders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,7 +47,7 @@ namespace Identity.Server
                     };
                 });
 
-            //services.AddTransient<ITokenBuilder, TokenBuilder>();
+            services.AddTransient<ITokenBuilder, TokenBuilder>();
 
             services.AddControllers();
         }

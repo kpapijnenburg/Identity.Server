@@ -1,7 +1,9 @@
 ﻿using Identity.Domain;
+using Identity.Server.Builders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Identity.Server.Controllers
@@ -26,8 +28,6 @@ namespace Identity.Server.Controllers
 
             if(result.Succeeded)
             {
-                string token = _tokenBuilder.Create()
-
                 return Ok();
             }
 
