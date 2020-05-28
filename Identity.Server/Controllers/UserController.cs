@@ -17,10 +17,11 @@ namespace Identity.Server.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ITokenBuilder _tokenBuilder;
 
-        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ITokenBuilder tokenBuilder)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenBuilder = tokenBuilder;
         }
 
         [AllowAnonymous]
