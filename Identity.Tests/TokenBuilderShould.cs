@@ -10,8 +10,9 @@ namespace Identity.Tests
         [Fact]
         public void Return_AToken()
         {
-            // Assert
-            //weet ik veel
+            // Arrange Assert
+            Assert.True(true);
+            
         }
     }
 }
