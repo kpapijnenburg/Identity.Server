@@ -16,7 +16,7 @@ namespace Identity.Tests
             //const string expectedJwt = "Jwt";
 
             //var controller = new UserController();
-            //var credentials = new LoginModel() { Username = "name", Password = "password"};
+            //var credentials = new LoginModel() { Username = "name", Password = "password" };
 
             //var result = await controller.Login(credentials);
 

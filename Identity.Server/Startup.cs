@@ -27,7 +27,7 @@ namespace Identity.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityServerContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalDB")));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityContext")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityServerContext>();
