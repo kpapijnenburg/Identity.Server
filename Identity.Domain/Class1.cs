@@ -2,7 +2,7 @@
 
 namespace Identity.Domain
 {
-    public class Class1
+    public class class1
     {
     }
 }

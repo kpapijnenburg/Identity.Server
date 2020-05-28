@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Identity.Server
+namespace Identity.Server.Controllers
 {
     public class UserController
     {
