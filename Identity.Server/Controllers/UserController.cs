@@ -1,5 +1,6 @@
 ﻿using Identity.Domain;
 using Identity.Server.Builders;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,16 +23,39 @@ namespace Identity.Server.Controllers
             _signInManager = signInManager;
         }
 
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginModel credentials)
         {
             var result = await _signInManager.PasswordSignInAsync(credentials.Username, credentials.Password, false, false);
 
             if(result.Succeeded)
             {
-                return Ok();
+                string token = _tokenBuilder.Create()
+                    .WithClaim(User.FindFirst(ClaimTypes.NameIdentifier))
+                    .WithClaim(User.FindFirst(ClaimTypes.Name))
+                    .Build();
+
+                return Ok(token);
             }
 
             return Unauthorized();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterModel credentials)
+        {
+            var user = new IdentityUser() { UserName = credentials.Username, Email = credentials.Email };
+
+            var result = await _userManager.CreateAsync(user, credentials.Password);
+
+            if(result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }
