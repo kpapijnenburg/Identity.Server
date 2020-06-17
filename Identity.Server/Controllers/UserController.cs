@@ -33,15 +33,15 @@ namespace Identity.Server.Controllers
 
             if (result.Succeeded)
             {
-                var id = User.FindFirst(ClaimTypes.NameIdentifier).SetType("id");
-                var username = User.FindFirst(ClaimTypes.Name).SetType("username");
+                var user = await _userManager.FindByNameAsync(credentials.Username);
 
                 string token = _tokenBuilder.Create()
-                    .WithClaim(id)
-                    .WithClaim(username)
+                    .WithClaim(new Claim("id", user.Id))
+                    .WithClaim(new Claim("username", user.UserName))
                     .Build();
 
-                var output = new LoginOutputModel() { Username = credentials.Username, Token = token };
+
+                var output = new LoginOutputModel() {Id = user.Id,  Username = user.UserName, Token = token };
 
                 return Ok(output);
             }
