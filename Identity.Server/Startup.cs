@@ -42,10 +42,15 @@ namespace Identity.Server
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowLocalHost", builder => builder.WithOrigins("http://localhost:8080", "http://127.0.0.1:8080").AllowAnyHeader().AllowAnyMethod());
+            });
 
             services.AddTransient<ITokenBuilder, TokenBuilder>();
 
@@ -63,6 +68,8 @@ namespace Identity.Server
             context.Database.Migrate();
 
             app.UseRouting();
+
+            app.UseCors("AllowLocalHost");
 
             app.UseAuthentication();
             app.UseAuthorization();

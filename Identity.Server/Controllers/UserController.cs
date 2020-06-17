@@ -1,5 +1,6 @@
 ﻿using Identity.Domain;
 using Identity.Server.Builders;
+using Identity.Server.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,14 +31,19 @@ namespace Identity.Server.Controllers
         {
             var result = await _signInManager.PasswordSignInAsync(credentials.Username, credentials.Password, false, false);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
+                var id = User.FindFirst(ClaimTypes.NameIdentifier).SetType("id");
+                var username = User.FindFirst(ClaimTypes.Name).SetType("username");
+
                 string token = _tokenBuilder.Create()
-                    .WithClaim(User.FindFirst(ClaimTypes.NameIdentifier))
-                    .WithClaim(User.FindFirst(ClaimTypes.Name))
+                    .WithClaim(id)
+                    .WithClaim(username)
                     .Build();
 
-                return Ok(token);
+                var output = new LoginOutputModel() { Username = credentials.Username, Token = token };
+
+                return Ok(output);
             }
 
             return Unauthorized();
@@ -47,16 +53,23 @@ namespace Identity.Server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel credentials)
         {
-            var user = new IdentityUser() { UserName = credentials.Username, Email = credentials.Email };
+            var user = new IdentityUser() { UserName = credentials.Username };
 
             var result = await _userManager.CreateAsync(user, credentials.Password);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return Ok();
             }
 
             return BadRequest();
+        }
+
+        [Authorize]
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            return Ok("Authorized");
         }
     }
 }
